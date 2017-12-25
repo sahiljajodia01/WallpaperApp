@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,9 +29,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
     }
 
     @Override
@@ -43,8 +42,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         final ArrayList<String> name = new ArrayList<String>();
         final EditText input = new EditText(getApplicationContext());
-        ListView listView = (ListView) findViewById(R.id.album_list_view);
-        listView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, name));
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.album_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        final AlbumAdapter albumAdapter = new AlbumAdapter(context, name);
+        recyclerView.setAdapter(albumAdapter);
+        albumAdapter.notifyDataSetChanged();
 
 
         switch (item.getItemId()) {
@@ -56,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+
                         String text = input.getText().toString();
                         name.add(text);
+                        albumAdapter.notifyDataSetChanged();
 
                     }
                 });

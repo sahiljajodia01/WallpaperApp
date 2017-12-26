@@ -23,12 +23,21 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    Context context = MainActivity.this;
+    private Context context;
+    private ArrayList<String> name = new ArrayList<String>();
+    private RecyclerView recyclerView;
+    private AlbumAdapter albumAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = MainActivity.this;
+        recyclerView = (RecyclerView) findViewById(R.id.album_recycler_view);
+        albumAdapter = new AlbumAdapter(context, name);
+
     }
 
     @Override
@@ -40,13 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final ArrayList<String> name = new ArrayList<String>();
+
         final EditText input = new EditText(getApplicationContext());
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.album_recycler_view);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        final AlbumAdapter albumAdapter = new AlbumAdapter(context, name);
         recyclerView.setAdapter(albumAdapter);
         albumAdapter.notifyDataSetChanged();
 
@@ -64,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
                         String text = input.getText().toString();
                         name.add(text);
-                        albumAdapter.notifyDataSetChanged();
+               
 
                     }
                 });
@@ -72,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.show();
 
 
-                }
+            }
 
 
 

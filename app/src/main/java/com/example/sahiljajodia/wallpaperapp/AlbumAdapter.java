@@ -1,6 +1,7 @@
 package com.example.sahiljajodia.wallpaperapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,8 +21,8 @@ import java.util.ArrayList;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder> {
 
-    private Context context;
-    private ArrayList<String> name;
+    private static Context context;
+    private static ArrayList<String> name;
 
     public AlbumAdapter(Context context, ArrayList<String> name) {
         this.context = context;
@@ -38,6 +39,16 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
             cardView = (CardView) itemView.findViewById(R.id.album_card_view);
             albumPhoto = (ImageView) itemView.findViewById(R.id.album_image);
             albumName = (TextView) itemView.findViewById(R.id.album_title);
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String  selectedAlbum = name.get(getAdapterPosition());
+                    Intent intent = new Intent(context, AlbumActivity.class );
+                    intent.putExtra("SelectedAlbum", selectedAlbum);
+                    context.startActivity(intent);
+                }
+            });
         }
 
     }
@@ -59,4 +70,9 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
         holder.albumName.setText(name.get(position));
         Glide.with(context).load(R.drawable.placeholder).into(holder.albumPhoto);
     }
+
+
 }
+
+
+// Student,

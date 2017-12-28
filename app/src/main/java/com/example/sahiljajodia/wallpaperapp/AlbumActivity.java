@@ -1,9 +1,20 @@
 package com.example.sahiljajodia.wallpaperapp;
 
-/**
- * Created by sahiljajodia on 25/12/17.
- */
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
-public class AlbumActivity {
+public class AlbumActivity extends AppCompatActivity {
+    private String albumName;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.album_photo);
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            albumName = bundle.getString("SelectedAlbum");
+            this.setTitle(albumName);
+        }
+
+    }
 }

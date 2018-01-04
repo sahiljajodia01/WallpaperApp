@@ -3,11 +3,13 @@ package com.example.sahiljajodia.wallpaperapp;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,11 +45,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Picasso.with(context).load(imagePath.get(position)).into(holder.imageView);
+        Glide.with(context).load(imagePath.get(position)).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
+        Log.i("Size: ", String.valueOf(imagePath.size()));
         return imagePath.size();
     }
 }

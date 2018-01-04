@@ -36,7 +36,6 @@ import java.util.List;
 public class AlbumActivity extends AppCompatActivity {
     private List<Uri> imagePaths = new ArrayList<Uri>();
     private String albumName;
-    private Button mPhotoButton;
     private RecyclerView recyclerView;
     private PhotoAdapter photoAdapter;
     private Context context;
@@ -56,41 +55,35 @@ public class AlbumActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.photo_recycler_view);
         photoAdapter = new PhotoAdapter(context, imagePaths);
 
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.photo_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(photoAdapter);
         photoAdapter.notifyDataSetChanged();
 
-        mPhotoButton = (Button) findViewById(R.id.add_photos_button);
-
-        mPhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-//                Intent intent = new Intent(getApplicationContext(), AlbumSelectActivity.class);
-//                intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 5);
-//                startActivityForResult(intent, Constants.REQUEST_CODE);
-
-//                Intent intent = new Intent(Intent.ACTION_PICK,
-//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 0);
-
+        switch (item.getItemId()) {
+            case R.id.action_add_photos:
                 Matisse.from(AlbumActivity.this)
                         .choose(MimeType.allOf())
                         .countable(true)
                         .maxSelectable(5)
                         .imageEngine(new PicassoEngine())
                         .forResult(REQUEST_CODE_CHOOSE);
-
-
-
-            }
-        });
-
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -125,4 +118,8 @@ public class AlbumActivity extends AppCompatActivity {
         recyclerView.getAdapter().notifyDataSetChanged();
 
     }
+
+
+
+
 }

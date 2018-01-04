@@ -11,14 +11,5 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/add_photos_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Photo"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="250dp"
-        />
-
 
 </LinearLayout>

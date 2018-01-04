@@ -34,12 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumActivity extends AppCompatActivity {
-    private ArrayList<Uri> imagePaths = new ArrayList<>();
+    private List<Uri> imagePaths = new ArrayList<Uri>();
     private String albumName;
     private Button mPhotoButton;
     private RecyclerView recyclerView;
     private PhotoAdapter photoAdapter;
     private Context context;
+    private static final int REQUEST_CODE_CHOOSE = 659;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +73,19 @@ public class AlbumActivity extends AppCompatActivity {
 //                intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 5);
 //                startActivityForResult(intent, Constants.REQUEST_CODE);
 
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 0);
+//                Intent intent = new Intent(Intent.ACTION_PICK,
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 0);
+
+                Matisse.from(AlbumActivity.this)
+                        .choose(MimeType.allOf())
+                        .countable(true)
+                        .maxSelectable(5)
+                        .imageEngine(new PicassoEngine())
+                        .forResult(REQUEST_CODE_CHOOSE);
+
 
 
             }
@@ -92,18 +101,23 @@ public class AlbumActivity extends AppCompatActivity {
 //            imagePaths = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
 //            Log.i("Image Path: ", imagePaths.toString());
 //        }
-        switch (requestCode) {
-            case 0:
-                if (data.getClipData() != null) {
-                    ClipData clipData = data.getClipData();
-                    for (int i = 0; i < clipData.getItemCount(); i++) {
-                        ClipData.Item item = clipData.getItemAt(i);
-                        Uri uri = item.getUri();
-                        imagePaths.add(uri);
-                        Log.i("Image Path: ", imagePaths.toString());
+//        switch (requestCode) {
+//            case 0:
+//                if (data.getClipData() != null) {
+//                    ClipData clipData = data.getClipData();
+//                    for (int i = 0; i < clipData.getItemCount(); i++) {
+//                        ClipData.Item item = clipData.getItemAt(i);
+//                        Uri uri = item.getUri();
+//                        imagePaths.add(uri);
+//                        Log.i("Image Path: ", imagePaths.toString());
+//
+//                    }
+//                }
+//        }
 
-                    }
-                }
+        if(requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            imagePaths = Matisse.obtainResult(data);
+            Log.i("URIs: ", imagePaths.toString());
         }
         photoAdapter = new PhotoAdapter(context, imagePaths);
         photoAdapter.notifyDataSetChanged();

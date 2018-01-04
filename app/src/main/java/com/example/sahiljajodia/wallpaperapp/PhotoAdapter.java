@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sahiljajodia on 02/01/18.
@@ -20,9 +21,9 @@ import java.util.ArrayList;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder> {
     private static Context context;
-    private static ArrayList<Uri> imagePath;
+    private static List<Uri> imagePath;
 
-    public PhotoAdapter(Context context, ArrayList<Uri> imagePath) {
+    public PhotoAdapter(Context context, List<Uri> imagePath) {
         this.context = context;
         this.imagePath = imagePath;
     }

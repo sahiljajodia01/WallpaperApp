@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -54,8 +55,7 @@ public class AlbumActivity extends AppCompatActivity {
         context = AlbumActivity.this;
         recyclerView = (RecyclerView) findViewById(R.id.photo_recycler_view);
         photoAdapter = new PhotoAdapter(context, imagePaths);
-
-
+        photoAdapter.notifyDataSetChanged();
 
     }
 
@@ -70,7 +70,7 @@ public class AlbumActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
         recyclerView.setAdapter(photoAdapter);
         photoAdapter.notifyDataSetChanged();
 

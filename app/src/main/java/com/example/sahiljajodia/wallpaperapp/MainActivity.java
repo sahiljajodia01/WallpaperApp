@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> name = new ArrayList<String>();
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
+    SQLiteDatabase albumDB;
 
 
     @Override
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         context = MainActivity.this;
         recyclerView = (RecyclerView) findViewById(R.id.album_recycler_view);
         albumAdapter = new AlbumAdapter(context, name);
+        albumDB = this.openOrCreateDatabase("Albums", MODE_PRIVATE, null);
+        albumDB.execSQL("CREATE TABLE IF NOT EXISTS albums (name VARCHAR)");
+        updateView();
 
     }
 
@@ -71,7 +78,12 @@ public class MainActivity extends AppCompatActivity {
 
                         String text = input.getText().toString();
                         name.add(text);
-               
+                        String sql = "INSERT INTO albums (name) VALUES (?)";
+                        SQLiteStatement sqLiteStatement = albumDB.compileStatement(sql);
+                        sqLiteStatement.bindString(1, text);
+                        sqLiteStatement.execute();
+                        updateView();
+                        albumAdapter.notifyDataSetChanged();
 
                     }
                 });
@@ -107,5 +119,21 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
 
+    }
+
+    public void updateView() {
+        Cursor cursor = albumDB.rawQuery("SELECT * FROM albums", null);
+
+        int nameIndex = cursor.getColumnIndex("name");
+
+        if(cursor.moveToFirst()) {
+            name.clear();
+        }
+
+        do {
+            name.add(cursor.getString(nameIndex));
+        } while(cursor.moveToNext());
+
+        cursor.close();
     }
 }
